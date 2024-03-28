@@ -5,29 +5,30 @@ import { ContextProvider } from '../contexts/ContextProvider';
 import { AppBar } from '../components/AppBar';
 import { ContentContainer } from '../components/ContentContainer';
 import { Footer } from '../components/Footer';
-import Notifications from '../components/Notification'
+import Notifications from '../components/Notification';
 require('@solana/wallet-adapter-react-ui/styles.css');
 require('../styles/globals.css');
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
-    return (
-        <>
-          <Head>
-            <title>Solana Scaffold Lite</title>
-          </Head>
+  return (
+    <>
+      <Head>
+        <title>Solana Starter Lite</title>
+      </Head>
 
-          <ContextProvider>
-            <div className="flex flex-col h-screen">
-              <Notifications />
-              <AppBar/>
-              <ContentContainer>
-                <Component {...pageProps} />
-                <Footer/>
-              </ContentContainer>
+      <ContextProvider>
+        <div className='flex flex-col h-screen  bg-[#070707]'>
+          <Notifications />
+          <AppBar />
+          <ContentContainer>
+            <div className='flex flex-col justify-center items-center h-screen w-screen'>
+            <Component {...pageProps} />
             </div>
-          </ContextProvider>
-        </>
-    );
+          </ContentContainer>
+        </div>
+      </ContextProvider>
+    </>
+  );
 };
 
 export default App;

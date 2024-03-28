@@ -1,8 +1,9 @@
 import { WalletAdapterNetwork, WalletError } from '@solana/wallet-adapter-base';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
-import { 
-    UnsafeBurnerWalletAdapter 
+import {
+    UnsafeBurnerWalletAdapter
 } from '@solana/wallet-adapter-wallets';
+import { Cluster, clusterApiUrl, Connection } from '@solana/web3.js';
 import { FC, ReactNode, useCallback, useMemo } from 'react';
 import { AutoConnectProvider, useAutoConnect } from './AutoConnectProvider';
 import { notify } from "../utils/notifications";
@@ -10,23 +11,16 @@ import { NetworkConfigurationProvider, useNetworkConfiguration } from './Network
 import dynamic from "next/dynamic";
 
 const ReactUIWalletModalProviderDynamic = dynamic(
-    async () =>
-        (await import("@solana/wallet-adapter-react-ui")).WalletModalProvider,
-    { ssr: false }
+  async () =>
+    (await import("@solana/wallet-adapter-react-ui")).WalletModalProvider,
+  { ssr: false }
 );
 
 const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const { autoConnect } = useAutoConnect();
     const { networkConfiguration } = useNetworkConfiguration();
     const network = networkConfiguration as WalletAdapterNetwork;
-
-    // Specify the custom RPC endpoint
-    const customRpcEndpoint = "https://mainnet.helius-rpc.com/?api-key=d0316e3d-2dc6-473a-af49-d9f20b63bdf5";
-
-    const endpoint = useMemo(() => {
-        // Use the custom RPC endpoint
-        return customRpcEndpoint;
-    }, []);
+    const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
     console.log(network);
 
@@ -52,7 +46,7 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
                 <ReactUIWalletModalProviderDynamic>
                     {children}
                 </ReactUIWalletModalProviderDynamic>
-            </WalletProvider>
+			</WalletProvider>
         </ConnectionProvider>
     );
 };
